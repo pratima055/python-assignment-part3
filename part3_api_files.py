@@ -3,7 +3,7 @@ file_name = "python_notes.txt"
 # Author: Pratima Chavan (bitsom_ba_2511746 )
 # READ AND WRITE BASICS
 # =============================================
-# PART A — Weite
+# PART A — Write
 # ==============================================
 
 # -----------------------------------------------
@@ -28,7 +28,7 @@ try:
     with open(file_name, "a", encoding="utf-8") as file:
         file.write("Topic 6: Functions improve code reusability.\n")
         file.write("Topic 7: Modules help to organize code.\n")
-    print("Lines append successfuly")
+    print("Lines appended successfuly")
 except Exception as e:
     print("Error in append operations:", e)
 
@@ -78,10 +78,14 @@ import requests
 # -----------------------------------------------
 
 url = "https://dummyjson.com/products?limit=20"
-response = requests.get(url)
-
-data = response.json()
-products = data["products"]
+try:
+    response = requests.get(url, timeout=5)
+    response.raise_for_status()
+    data = response.json()
+    products = data["products"]
+except Exception as e:
+    print("API Error:", e)
+    products = []
 
 print("\nID  | Title                          | Category      | Price    | Rating")
 print("----|------------------------------|---------------|----------|--------")
@@ -108,8 +112,13 @@ for p in sorted_products:
 
 print("\n\nLAPTOP PRODUCTS:\n")
 laptop_url = "https://dummyjson.com/products/category/laptops"
-lap_response = requests.get(laptop_url) 
-lap_data = lap_response.json()
+try:
+    lap_response = requests.get(laptop_url, timeout=5)
+    lap_response.raise_for_status()
+    lap_data = lap_response.json()
+except Exception as e:
+    print("Laptop API Error:", e)
+    lap_data = {"products": []}
 
 for item in lap_data["products"]:
     print(f"{item['title']} - $ {item['price']}")
@@ -153,7 +162,7 @@ while True:
     
 
     try:
-        url = "https://dummyjson.com/products/{products_id}"
+        url = "https://dummyjson.com/product/{products_id}"
         response = requests.get (url, timeout=5)
         
         if response.status_code == 404:
